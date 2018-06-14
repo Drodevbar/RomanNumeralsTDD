@@ -1,10 +1,10 @@
 package romanNumerals;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 class RomanNumeralsConverter
 {
-    private final static HashMap<Integer, Character> ARABIC_TO_ROMAN = new HashMap<Integer, Character>() {
+    private final static TreeMap<Integer, Character> ARABIC_TO_ROMAN = new TreeMap<Integer, Character>() {
         {
             put(1, 'I');
             put(5, 'V');
@@ -16,8 +16,12 @@ class RomanNumeralsConverter
         }
     };
 
-    static String toRoman(int arabic)
+    static String toRoman(int arabic) throws IllegalArgumentException
     {
+        if (arabic < 1) {
+            throw new IllegalArgumentException("Number can not be less than 1");
+        }
+        
         if (ARABIC_TO_ROMAN.containsKey(arabic)) {
             return ARABIC_TO_ROMAN
                     .get(arabic)
