@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 class RomanNumeralsConverter
 {
-    private static HashMap<Integer, Character> arabicToRomanMap = new HashMap<Integer, Character>() {
+    private final static HashMap<Integer, Character> ARABIC_TO_ROMAN = new HashMap<Integer, Character>() {
         {
             put(1, 'I');
             put(5, 'V');
@@ -18,8 +18,8 @@ class RomanNumeralsConverter
 
     static String toRoman(int arabic)
     {
-        if (arabicToRomanMap.containsKey(arabic)) {
-            return arabicToRomanMap
+        if (ARABIC_TO_ROMAN.containsKey(arabic)) {
+            return ARABIC_TO_ROMAN
                     .get(arabic)
                     .toString();
         }

@@ -39,4 +39,9 @@ public class RomanNumeralsConverterTest extends TestCase
     {
         assertEquals("M", toRoman(1000));
     }
+    
+    public void testTwo()
+    {
+        assertEquals("II", toRoman(2));
+    }
 }
