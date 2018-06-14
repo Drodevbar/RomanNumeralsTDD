@@ -15,6 +15,13 @@ public class RomanNumeralsConverterTest
     public final ExpectedException thrown = ExpectedException.none();
      
     @Test
+    public void testExceptionWhenNumberLessThanOneGiven() throws IllegalArgumentException
+    {
+        thrown.expect(IllegalArgumentException.class);
+        toRoman(0);
+    }
+    
+    @Test
     public void testOne()
     {
         assertEquals("I", toRoman(1));
@@ -57,15 +64,32 @@ public class RomanNumeralsConverterTest
     }
     
     @Test
-    public void testExceptionWhenNumberLessThanOneGiven() throws IllegalArgumentException
-    {
-        thrown.expect(IllegalArgumentException.class);
-        toRoman(0);
-    }
-    
-    @Test
     public void testTwo()
     {
         assertEquals("II", toRoman(2));
+    }
+   
+    @Test
+    public void testThree()
+    {
+        assertEquals("III", toRoman(3));
+    }
+    
+    @Test
+    public void testFourtySix()
+    {
+        assertEquals("XLVI", toRoman(46));
+    }
+    
+    @Test
+    public void testOneHoundredSixtySeven()
+    {
+        assertEquals("CLXVII", toRoman(167));
+    }
+    
+    @Test
+    public void testNineHundredNinetyNine()
+    {
+        assertEquals("CMXCIX", toRoman(999));
     }
 }

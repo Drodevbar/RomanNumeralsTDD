@@ -4,15 +4,22 @@ import java.util.TreeMap;
 
 class RomanNumeralsConverter
 {
-    private final static TreeMap<Integer, Character> ARABIC_TO_ROMAN = new TreeMap<Integer, Character>() {
+    private final static TreeMap<Integer, String> ARABIC_TO_ROMAN = new TreeMap<Integer, String>()
+    {
         {
-            put(1, 'I');
-            put(5, 'V');
-            put(10, 'X');
-            put(50, 'L');
-            put(100, 'C');
-            put(500, 'D');
-            put(1000, 'M');
+            put(1, "I");
+            put(4, "IV");
+            put(5, "V");
+            put(9, "IX");
+            put(10, "X");
+            put(40, "XL");
+            put(50, "L");
+            put(90, "XC");
+            put(100, "C");
+            put(400, "CD");
+            put(500, "D");
+            put(900, "CM");
+            put(1000, "M");
         }
     };
 
@@ -23,10 +30,17 @@ class RomanNumeralsConverter
         }
         
         if (ARABIC_TO_ROMAN.containsKey(arabic)) {
-            return ARABIC_TO_ROMAN
-                    .get(arabic)
-                    .toString();
+            return ARABIC_TO_ROMAN.get(arabic);
         }
-        return "";
+        
+        String outputBuffer = "";
+        Integer closestNumber = 0;
+        while (!ARABIC_TO_ROMAN.containsKey(arabic)) {
+            arabic -= closestNumber;
+            closestNumber = ARABIC_TO_ROMAN.floorKey(arabic);
+            outputBuffer += ARABIC_TO_ROMAN.get(closestNumber);
+        }
+        
+        return outputBuffer;
     }
 }
