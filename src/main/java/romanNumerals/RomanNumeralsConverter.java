@@ -29,18 +29,16 @@ class RomanNumeralsConverter
             throw new IllegalArgumentException("Number can not be less than 1");
         }
         
-        if (ARABIC_TO_ROMAN.containsKey(arabic)) {
-            return ARABIC_TO_ROMAN.get(arabic);
-        }
-        
-        String outputBuffer = "";
+        StringBuilder outputBuilder = new StringBuilder();
         Integer closestNumber = 0;
-        while (!ARABIC_TO_ROMAN.containsKey(arabic)) {
+
+        do {
             arabic -= closestNumber;
             closestNumber = ARABIC_TO_ROMAN.floorKey(arabic);
-            outputBuffer += ARABIC_TO_ROMAN.get(closestNumber);
-        }
+            outputBuilder.append(ARABIC_TO_ROMAN.get(closestNumber));
+        } while (!ARABIC_TO_ROMAN.containsKey(arabic));
         
-        return outputBuffer;
+        return outputBuilder.toString();
     }
+
 }
