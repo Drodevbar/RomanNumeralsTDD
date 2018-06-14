@@ -1,95 +1,37 @@
 package romanNumerals;
 
+import junitparams.Parameters;
+import junitparams.JUnitParamsRunner;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static romanNumerals.RomanNumeralsConverter.toRoman;
 
-@RunWith(JUnit4.class)
+@RunWith(JUnitParamsRunner.class)
 public class RomanNumeralsConverterTest
 {
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
-     
+    
     @Test
-    public void testExceptionWhenNumberLessThanOneGiven() throws IllegalArgumentException
+    @Parameters({
+            "I, 1", "V, 5", "C, 100", "M, 1000",
+            "IV, 4", "IX, 9", "CD, 400", "CM, 900",
+            "II, 2", "III, 3", "XLVI, 46", "CLXVII, 167", 
+            "CMXCIX, 999", "XLV, 45", "CIX, 109", "VIII, 8",
+            "MLIX, 1059", "LXXVII, 77", "MMM, 3000", "DXXXIII, 533"
+    })
+    public void shouldConvertToProperRomanNumeral(String roman, int arabic)
+    {
+        assertEquals(roman, toRoman(arabic));
+    }
+    
+    @Test
+    public void shouldThrowExceptionWhenNumberLessThanOneGiven() throws IllegalArgumentException
     {
         thrown.expect(IllegalArgumentException.class);
         toRoman(0);
-    }
-    
-    @Test
-    public void testOne()
-    {
-        assertEquals("I", toRoman(1));
-    }
-     
-    @Test
-    public void testFive()
-    {
-        assertEquals("V", toRoman(5));
-    }
-     
-    @Test
-    public void testTen()
-    {
-        assertEquals("X", toRoman(10));
-    }
-     
-    @Test
-    public void testFifty()
-    {
-        assertEquals("L", toRoman(50));
-    }
-     
-    @Test
-    public void testHundred()
-    {
-        assertEquals("C", toRoman(100));
-    }
-     
-    @Test
-    public void testFiveHundred()
-    {
-        assertEquals("D", toRoman(500));
-    }
-     
-    @Test
-    public void testThousand()
-    {
-        assertEquals("M", toRoman(1000));
-    }
-    
-    @Test
-    public void testTwo()
-    {
-        assertEquals("II", toRoman(2));
-    }
-   
-    @Test
-    public void testThree()
-    {
-        assertEquals("III", toRoman(3));
-    }
-    
-    @Test
-    public void testFourtySix()
-    {
-        assertEquals("XLVI", toRoman(46));
-    }
-    
-    @Test
-    public void testOneHoundredSixtySeven()
-    {
-        assertEquals("CLXVII", toRoman(167));
-    }
-    
-    @Test
-    public void testNineHundredNinetyNine()
-    {
-        assertEquals("CMXCIX", toRoman(999));
     }
 }
