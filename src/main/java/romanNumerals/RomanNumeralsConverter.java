@@ -1,5 +1,6 @@
 package romanNumerals;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 class RomanNumeralsConverter
@@ -30,7 +31,7 @@ class RomanNumeralsConverter
         }
         
         StringBuilder outputBuilder = new StringBuilder();
-        Integer closestNumber = 0;
+        int closestNumber = 0;
 
         do {
             arabic -= closestNumber;
@@ -40,5 +41,51 @@ class RomanNumeralsConverter
         
         return outputBuilder.toString();
     }
-
+    
+    static int toArabic(String roman) throws IllegalArgumentException
+    {
+        if (!isRomanNumeralValid(roman)) {
+            throw new IllegalArgumentException("Illegal roman numeral given");
+        }
+       
+        if (ARABIC_TO_ROMAN.containsValue(roman)) {
+            return getArabicByRoman(roman);
+        }
+        
+        int arabicNumber = 0;
+        int romanCurrentIndex = 0;
+        
+        do {
+            if (romanCurrentIndex + 1 < roman.length() && getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2)) > 0) {
+                arabicNumber += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2));
+                romanCurrentIndex += 2;
+            }
+            else {
+                arabicNumber += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 1));
+                romanCurrentIndex++;
+            }
+        } while (romanCurrentIndex < roman.length());
+        
+        return arabicNumber;
+    }
+    
+    private static boolean isRomanNumeralValid(String roman)
+    {
+        for (Character numeral: roman.toCharArray()) {
+            if (!ARABIC_TO_ROMAN.containsValue(numeral.toString())) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private static int getArabicByRoman(String roman)
+    {
+        for (Map.Entry<Integer, String> entry : ARABIC_TO_ROMAN.entrySet()) {
+            if (entry.getValue().equals(roman)) {
+                return entry.getKey();
+            }
+        }
+        return 0;
+    }
 }

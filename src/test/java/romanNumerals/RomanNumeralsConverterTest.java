@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static romanNumerals.RomanNumeralsConverter.toRoman;
+import static romanNumerals.RomanNumeralsConverter.toArabic;
 
 @RunWith(JUnitParamsRunner.class)
 public class RomanNumeralsConverterTest
@@ -17,11 +18,11 @@ public class RomanNumeralsConverterTest
     
     @Test
     @Parameters({
-            "I, 1", "V, 5", "C, 100", "M, 1000",
-            "IV, 4", "IX, 9", "CD, 400", "CM, 900",
-            "II, 2", "III, 3", "XLVI, 46", "CLXVII, 167", 
-            "CMXCIX, 999", "XLV, 45", "CIX, 109", "VIII, 8",
-            "MLIX, 1059", "LXXVII, 77", "MMM, 3000", "DXXXIII, 533"
+        "I, 1", "V, 5", "C, 100", "M, 1000",
+        "IV, 4", "IX, 9", "CD, 400", "CM, 900",
+        "II, 2", "III, 3", "XLVI, 46", "CLXVII, 167", 
+        "CMXCIX, 999", "XLV, 45", "CIX, 109", "VIII, 8",
+        "MLIX, 1059", "LXXVII, 77", "MMM, 3000", "DXXXIII, 533"
     })
     public void shouldConvertToProperRomanNumeral(String roman, int arabic)
     {
@@ -33,5 +34,25 @@ public class RomanNumeralsConverterTest
     {
         thrown.expect(IllegalArgumentException.class);
         toRoman(0);
+    }
+    
+    @Test
+    @Parameters({
+        "I, 1", "V, 5", "C, 100", "M, 1000",
+        "IV, 4", "IX, 9", "CD, 400", "CM, 900",
+        "II, 2", "III, 3", "XLVI, 46", "CLXVII, 167", 
+        "CMXCIX, 999", "XLV, 45", "CIX, 109", "VIII, 8",
+        "MLIX, 1059", "LXXVII, 77", "MMM, 3000", "DXXXIII, 533"
+    })
+    public void shouldConvertToProperArabicNumber(String roman, int arabic)
+    {
+        assertEquals(arabic, toArabic(roman));
+    }
+    
+    @Test
+    public void shouldThrowExceptionWhenIllegalNumeralGiven() throws IllegalArgumentException
+    {
+        thrown.expect(IllegalArgumentException.class);
+        toArabic("ABC");
     }
 }
