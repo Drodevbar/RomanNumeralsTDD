@@ -2,6 +2,7 @@ package romanNumerals;
 
 import java.util.Map;
 import java.util.TreeMap;
+import static java.lang.Math.*;
 
 class RomanNumeralsConverter
 {
@@ -9,17 +10,11 @@ class RomanNumeralsConverter
     {
         {
             put(1, "I");
-            put(4, "IV");
             put(5, "V");
-            put(9, "IX");
             put(10, "X");
-            put(40, "XL");
             put(50, "L");
-            put(90, "XC");
             put(100, "C");
-            put(400, "CD");
             put(500, "D");
-            put(900, "CM");
             put(1000, "M");
         }
     };
@@ -30,16 +25,25 @@ class RomanNumeralsConverter
             throw new IllegalArgumentException("Number can not be less than 1");
         }
         
-        StringBuilder romanNumeralBuilder = new StringBuilder();
-        int closestNumber = 0;
-
-        do {
-            arabic -= closestNumber;
-            closestNumber = ARABIC_TO_ROMAN.floorKey(arabic);
-            romanNumeralBuilder.append(ARABIC_TO_ROMAN.get(closestNumber));
-        } while (!ARABIC_TO_ROMAN.containsKey(arabic));
+        if (ARABIC_TO_ROMAN.containsKey(arabic)) {
+            return ARABIC_TO_ROMAN.get(arabic);
+        }
         
-        return romanNumeralBuilder.toString();
+        return buildRomanNumeral(arabic);
+    }
+    
+    private static String buildRomanNumeral(int arabic)
+    {
+        int powerOfTen = (int) pow(10, floor(log10(arabic)));
+        int firstDigit = arabic / powerOfTen;
+        
+        if (firstDigit % 5 == 4) {
+            int rest = arabic - (firstDigit * powerOfTen);
+            return toRoman(powerOfTen) + toRoman((firstDigit + 1) * powerOfTen) + ((rest > 0) ? toRoman(rest) : "");
+        }
+        
+        int floorKey = ARABIC_TO_ROMAN.floorKey(arabic);  
+        return ARABIC_TO_ROMAN.get(floorKey) + toRoman(arabic - floorKey);
     }
     
     static int toArabic(String roman) throws IllegalArgumentException
@@ -57,18 +61,17 @@ class RomanNumeralsConverter
     
     private static int buildArabicNumber(String roman)
     {
-        int romanCurrentIndex = 0;
         int arabic = 0;
         
-        do {
-            if (romanCurrentIndex + 1 < roman.length() && ARABIC_TO_ROMAN.containsValue(roman.substring(romanCurrentIndex, romanCurrentIndex + 2))) {
-                arabic += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2));
-                romanCurrentIndex += 2;
+        for (int i = 0; i < roman.length(); i++) {
+            int currentNumber = getArabicByRoman(Character.toString(roman.charAt(i)));
+            if (i + 1 < roman.length() && currentNumber < getArabicByRoman(Character.toString(roman.charAt(i + 1)))) {
+                arabic += getArabicByRoman(Character.toString(roman.charAt(i + 1))) - currentNumber;
+                i++;
             } else {
-                arabic += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 1));
-                romanCurrentIndex++;
+                arabic += currentNumber;
             }
-        } while (romanCurrentIndex < roman.length());
+        }
         
         return arabic;
     }
