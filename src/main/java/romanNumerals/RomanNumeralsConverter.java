@@ -30,16 +30,16 @@ class RomanNumeralsConverter
             throw new IllegalArgumentException("Number can not be less than 1");
         }
         
-        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder romanNumeralBuilder = new StringBuilder();
         int closestNumber = 0;
 
         do {
             arabic -= closestNumber;
             closestNumber = ARABIC_TO_ROMAN.floorKey(arabic);
-            outputBuilder.append(ARABIC_TO_ROMAN.get(closestNumber));
+            romanNumeralBuilder.append(ARABIC_TO_ROMAN.get(closestNumber));
         } while (!ARABIC_TO_ROMAN.containsKey(arabic));
         
-        return outputBuilder.toString();
+        return romanNumeralBuilder.toString();
     }
     
     static int toArabic(String roman) throws IllegalArgumentException
@@ -52,21 +52,25 @@ class RomanNumeralsConverter
             return getArabicByRoman(roman);
         }
         
-        int arabicNumber = 0;
+        return buildArabicNumber(roman);
+    }
+    
+    private static int buildArabicNumber(String roman)
+    {
         int romanCurrentIndex = 0;
+        int arabic = 0;
         
         do {
-            if (romanCurrentIndex + 1 < roman.length() && getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2)) > 0) {
-                arabicNumber += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2));
+            if (romanCurrentIndex + 1 < roman.length() && ARABIC_TO_ROMAN.containsValue(roman.substring(romanCurrentIndex, romanCurrentIndex + 2))) {
+                arabic += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 2));
                 romanCurrentIndex += 2;
-            }
-            else {
-                arabicNumber += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 1));
+            } else {
+                arabic += getArabicByRoman(roman.substring(romanCurrentIndex, romanCurrentIndex + 1));
                 romanCurrentIndex++;
             }
         } while (romanCurrentIndex < roman.length());
         
-        return arabicNumber;
+        return arabic;
     }
     
     private static boolean isRomanNumeralValid(String roman)
